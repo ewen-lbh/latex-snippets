@@ -15,7 +15,47 @@ def math():
 		return first != ignore
 	except StopIteration:
 		return False
+
+def to_greek_letter(letter):
+    return {
+	'a': 'alpha',
+	'b': 'beta',
+	'g': 'gamma',
+	'd': 'delta',
+	'e': 'epsilon',
+	'z': 'zeta',
+	'h': 'eta',
+	'u': 'theta',
+	'i': 'iota',
+	'k': 'kappa',
+	'l': 'lambda',
+	'm': 'mu',
+	'n': 'nu',
+	'j': 'xi',
+	'p': 'pi',
+	'r': 'rho',
+	's': 'sigma',
+	't': 'tau',
+	'f': 'phi',
+	'x': 'khi',
+	'y': 'psi',
+	'w': 'omega'
+    }.get(letter, None)
 endglobal
+
+snippet "[²§]([a-zA-Z=])" "Greek letters" Ar
+`!p 
+letter = match.group(1)
+greek = to_greek_letter(letter.lower())
+if greek is None:
+	snip.rv = letter
+else:
+	rv = '\\' + greek
+	if letter.isupper():
+		rv = rv[0] + rv[1].upper() + rv[2:]
+	snip.rv = rv
+`
+endsnippet
 
 snippet beg "begin{} / end{}" bA
 \\begin{$1}
@@ -608,5 +648,7 @@ endsnippet
 snippet DD "D" iA
 \mathbb{D}
 endsnippet
+
+
 
 # vim:ft=snippets
