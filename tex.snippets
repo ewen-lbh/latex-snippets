@@ -1,7 +1,7 @@
 global !p
 tex_math_zones = ['texMathZone' + x for x in ['A', 'AS', 'B', 'BS', 'C', 'CS', 'D', 'DS', 'E', 'ES', 'F', 'FS', 'G', 'GS', 'H', 'HS', 'I', 'IS', 'J', 'JS', 'K', 'KS', 'L', 'LS', 'DS', 'V', 'W', 'X', 'Y', 'Z', 'AmsA', 'AmsB', 'AmsC', 'AmsD', 'AmsE', 'AmsF', 'AmsG', 'AmsAS', 'AmsBS', 'AmsCS', 'AmsDS', 'AmsES', 'AmsFS', 'AmsGS' ]]
 
-te_ignore_math_zones = ['texMathText']
+tex_ignore_math_zones = ['texMathText']
 
 tex_math_zone_ids = vim.eval('map('+str(tex_math_zones)+", 'hlID(v:val)')")
 tex_ignore_math_zone_ids = vim.eval('map('+str(tex_ignore_math_zones)+", 'hlID(v:val)')")
@@ -11,7 +11,7 @@ ignore = tex_ignore_math_zone_ids[0]
 def math():
 	synstackids = vim.eval("synstack(line('.'), col('.') - (col('.')>=2 ? 1 : 0))")
 	try:
-		first = next(i for i in reversed(synstackids) if i in tex_ignore_math_zoneids or i in tex_math_zone_ids)
+		first = next(i for i in reversed(synstackids) if i in tex_ignore_math_zone_ids or i in tex_math_zone_ids)
 		return first != ignore
 	except StopIteration:
 		return False
