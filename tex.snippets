@@ -1,49 +1,21 @@
 global !p
-texMathZones = ['texMathZone' + x for x in ['A', 'AS', 'B', 'BS', 'C', 'CS', 'D', 'DS', 'E', 'ES', 'F', 'FS', 'G', 'GS', 'H', 'HS', 'I', 'IS', 'J', 'JS', 'K', 'KS', 'L', 'LS', 'DS', 'V', 'W', 'X', 'Y', 'Z', 'AmsA', 'AmsB', 'AmsC', 'AmsD', 'AmsE', 'AmsF', 'AmsG', 'AmsAS', 'AmsBS', 'AmsCS', 'AmsDS', 'AmsES', 'AmsFS', 'AmsGS' ]]
+tex_math_zones = ['texMathZone' + x for x in ['A', 'AS', 'B', 'BS', 'C', 'CS', 'D', 'DS', 'E', 'ES', 'F', 'FS', 'G', 'GS', 'H', 'HS', 'I', 'IS', 'J', 'JS', 'K', 'KS', 'L', 'LS', 'DS', 'V', 'W', 'X', 'Y', 'Z', 'AmsA', 'AmsB', 'AmsC', 'AmsD', 'AmsE', 'AmsF', 'AmsG', 'AmsAS', 'AmsBS', 'AmsCS', 'AmsDS', 'AmsES', 'AmsFS', 'AmsGS' ]]
 
-texIgnoreMathZones = ['texMathText']
+te_ignore_math_zones = ['texMathText']
 
-texMathZoneIds = vim.eval('map('+str(texMathZones)+", 'hlID(v:val)')")
-texIgnoreMathZoneIds = vim.eval('map('+str(texIgnoreMathZones)+", 'hlID(v:val)')")
+tex_math_zone_ids = vim.eval('map('+str(tex_math_zones)+", 'hlID(v:val)')")
+tex_ignore_math_zone_ids = vim.eval('map('+str(tex_ignore_math_zones)+", 'hlID(v:val)')")
 
-ignore = texIgnoreMathZoneIds[0]
+ignore = tex_ignore_math_zone_ids[0]
 
 def math():
 	synstackids = vim.eval("synstack(line('.'), col('.') - (col('.')>=2 ? 1 : 0))")
 	try:
-		first = next(i for i in reversed(synstackids) if i in texIgnoreMathZoneIds or i in texMathZoneIds)
+		first = next(i for i in reversed(synstackids) if i in tex_ignore_math_zoneids or i in tex_math_zone_ids)
 		return first != ignore
 	except StopIteration:
 		return False
 endglobal
-
-snippet template "Basic template" b
-\documentclass[a4paper]{article}
-
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-\usepackage{textcomp}
-\usepackage[dutch]{babel}
-\usepackage{amsmath, amssymb}
-
-
-% figure support
-\usepackage{import}
-\usepackage{xifthen}
-\pdfminorversion=7
-\usepackage{pdfpages}
-\usepackage{transparent}
-\newcommand{\incfig}[1]{%
-	\def\svgwidth{\columnwidth}
-	\import{./figures/}{#1.pdf_tex}
-}
-
-\pdfsuppresswarningpagegroup=1
-
-\begin{document}
-	$0
-\end{document}
-endsnippet
 
 snippet beg "begin{} / end{}" bA
 \\begin{$1}
@@ -76,25 +48,25 @@ snippet fig "Figure environment" b
 \end{figure}
 endsnippet
 
-snippet enum "Enumerate" bA
+snippet ul "Enumerate" b
 \begin{enumerate}
 	\item $0
 \end{enumerate}
 endsnippet
 
-snippet item "Itemize" bA
+snippet li "Itemize" b
 \begin{itemize}
 	\item $0
 \end{itemize}
 endsnippet
 
-snippet desc "Description" b
+snippet dl "Description" b
 \begin{description}
 	\item[$1] $0
 \end{description}
 endsnippet
 
-snippet pac "Package" b
+snippet pkg "Package" b
 \usepackage[${1:options}]{${2:package}}$0
 endsnippet
 
@@ -111,7 +83,7 @@ snippet iff "iff" Ai
 \iff
 endsnippet
 
-snippet mk "Math" wA
+snippet $s "Math" wA
 $${1}$`!p
 if t[2] and t[2][0] not in [',', '.', '?', '-', ' ']:
 	snip.rv = ' '
@@ -120,18 +92,17 @@ else:
 `$2
 endsnippet
 
-snippet dm "Math" wA
+snippet $d "Math" wA
 \[
 ${1:${VISUAL}}
 .\] $0
 endsnippet
 
-snippet ali "Align" bA
+snippet $a "Align" bA
 \begin{align*}
 	${1:${VISUAL}}
 .\end{align*}
 endsnippet
-
 
 context "math()"
 snippet // "Fraction" iA
@@ -169,7 +140,7 @@ snippet '([A-Za-z])(\d)' "auto subscript" wrA
 endsnippet
 
 context "math()"
-snippet '([A-Za-z])_(\d\d)' "auto subscript2" wrA
+snippet '([A-Za-z])_(\d\d)' "auto subscript " wrA
 `!p snip.rv = match.group(1)`_{`!p snip.rv = match.group(2)`}
 endsnippet
 
@@ -191,12 +162,12 @@ snip.rv = eval('latex(' + match.group(1).replace('\\', '').replace('^', '**').re
 endsnippet
 
 priority 1000
-snippet math "mathematicablock" w
-math $1 math$0
+snippet calc "mathematicablock" w
+calc $1 calc$0
 endsnippet
 
 priority 10000
-snippet 'math(.*)math' "math" wr
+snippet 'calc(.*)calc' "math" wr
 `!p
 import subprocess
 code = match.group(1)
@@ -269,28 +240,17 @@ snippet conj "conjugate" iA
 \overline{$1}$0
 endsnippet
 
+context "math()"
 snippet sum "sum" w
 \sum_{n=${1:1}}^{${2:\infty}} ${3:a_n z^n}
-endsnippet
-
-snippet taylor "taylor" w
-\sum_{${1:k}=${2:0}}^{${3:\infty}} ${4:c_$1} (x-a)^$1 $0
 endsnippet
 
 snippet lim "limit" w
 \lim_{${1:n} \to ${2:\infty}} 
 endsnippet
 
-snippet limsup "limsup" w
-\limsup_{${1:n} \to ${2:\infty}} 
-endsnippet
-
 snippet prod "product" w
 \prod_{${1:n=${2:1}}}^{${3:\infty}} ${4:${VISUAL}} $0
-endsnippet
-
-snippet part "d/dx" w
-\frac{\partial ${1:V}}{\partial ${2:x}} $0
 endsnippet
 
 context "math()"
@@ -309,25 +269,17 @@ snippet cb "^3" iA
 endsnippet
 
 context "math()"
-snippet td "to the ... power" iA
+snippet pw "to the ... power" iA
 ^{$1}$0
-endsnippet
-
-context "math()"
-snippet rd "to the ... power" iA
-^{($1)}$0
 endsnippet
 
 snippet __ "subscript" iA
 _{$1}$0
 endsnippet
 
-snippet ooo "\infty" iA
+context "math()"
+snippet oo "\infty" iA
 \infty
-endsnippet
-
-snippet rij "mrij" i
-(${1:x}_${2:n})_{${3:$2}\\in${4:\\N}}$0
 endsnippet
 
 snippet <= "leq" iA
@@ -339,7 +291,7 @@ snippet >= "geq" iA
 endsnippet
 
 context "math()"
-snippet EE "geq" iA
+snippet EE "exists" iA
 \exists 
 endsnippet
 
@@ -385,12 +337,25 @@ x_{n+1}
 endsnippet
 
 context "math()"
+snippet np1 "x" iA
+$1_{n+1}
+endsnippet
+
+context "math()"
 snippet xmm "x" iA
 x_{m}
 endsnippet
 
-snippet R0+ "R0+" iA
-\\R_0^+
+snippet R+ "R+" iA
+\\R_+
+endsnippet
+
+snippet R* "R*" iA
+\\R^\ast
+endsnippet
+
+snippet Rpa "R+*" iA
+\\R_+^\ast
 endsnippet
 
 snippet plot "Plot" w
@@ -435,7 +400,7 @@ snippet xx "cross" iA
 endsnippet
 
 priority 100
-snippet ** "cdot" iA
+snippet * "cdot" iA
 \cdot 
 endsnippet
 
@@ -446,7 +411,7 @@ endsnippet
 
 priority 100
 context "math()"
-snippet '(?<!\\)(sin|cos|arccot|cot|csc|ln|log|exp|star|perp)' "ln" rwA
+snippet '(?<!\\)(sin|cos|arccot|cot|csc|ln|log|exp|star|perp)' "Functions" rwA
 \\`!p snip.rv = match.group(1)`
 endsnippet
 
@@ -458,7 +423,7 @@ endsnippet
 
 priority 200
 context "math()"
-snippet '(?<!\\)(arcsin|arccos|arctan|arccot|arccsc|arcsec|pi|zeta|int)' "ln" rwA
+snippet '(?<!\\)(arcsin|arccos|arctan|arccot|arccsc|arcsec|pi|zeta|int)' "Functions" rwA
 \\`!p snip.rv = match.group(1)`
 endsnippet
 
@@ -486,8 +451,8 @@ snippet invs "inverse" iA
 endsnippet
 
 context "math()"
-snippet compl "complement" iA
-^{c}
+snippet set- "setminus" iA
+\setminus
 endsnippet
 
 context "math()"
@@ -503,9 +468,12 @@ snippet << "<<" iA
 \ll
 endsnippet
 
-
 snippet ~~ "~" iA
 \sim 
+endsnippet
+
+snippet ~= "Approx. equal to" iA
+\approx 
 endsnippet
 
 context "math()"
@@ -572,7 +540,7 @@ snippet <! "normal" iA
 \triangleleft 
 endsnippet
 
-snippet <> "hokje" iA
+snippet <> "Diamond" iA
 \diamond 
 endsnippet
 
@@ -598,7 +566,7 @@ snippet SI "SI" iA
 \SI{$1}{$2}
 endsnippet
 
-snippet bigfun "Big function" iA
+snippet bigfn "Big function" iA
 \begin{align*}
 	$1: $2 &\longrightarrow $3 \\\\
 	$4 &\longmapsto $1($4) = $0
@@ -632,11 +600,6 @@ context "math()"
 snippet "([a-zA-Z])hat" "hat" riA
 \hat{`!p snip.rv=match.group(1)`}
 endsnippet
-
-snippet letw "let omega" iA
-Let $\Omega \subset \C$ be open.
-endsnippet
-
 
 snippet HH "H" iA
 \mathbb{H}
