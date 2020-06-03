@@ -1,40 +1,16 @@
-# Vim + LaTeX snippets setup
+# Vim UltiSnips LaTeX snippets
 
-*[How I'm able to take notes in mathematics lectures using LaTeX and Vim](https://castel.dev/post/lecture-notes-1/)*
+(heavily) based on [gillescastel/latex-snippets](https://github.com/gillescastel/latex-snippets)
 
-## Vim configuration
+## Installation
 
-Copy `tex.snippets` to `~/.vim/UltiSnips/` and assuming you're using [Vim Plug](https://github.com/junegunn/vim-plug), add the following to your `.vimrc`:
+This assumes that you have already (n)vim, [vim-plug](https://github.com/junegunn/vim-plug) and [UltiSnips](https://github.com/sirver/UltiSnips) installed
 
-```vim
-Plug 'sirver/ultisnips'
-    let g:UltiSnipsExpandTrigger = '<tab>'
-    let g:UltiSnipsJumpForwardTrigger = '<tab>'
-    let g:UltiSnipsJumpBackwardTrigger = '<s-tab>'
-
-Plug 'lervag/vimtex'
-    let g:tex_flavor='latex'
-    let g:vimtex_view_method='zathura'
-    let g:vimtex_quickfix_mode=0
-
-Plug 'KeitaNakamura/tex-conceal.vim'
-    set conceallevel=1
-    let g:tex_conceal='abdmg'
-    hi Conceal ctermbg=none
-
-setlocal spell
-set spelllang=en_us
-inoremap <C-l> <c-g>u<Esc>[s1z=`]a<c-g>u
+```bash
+cd ~/.config/nvim # Or ~/.vim for vim users (wherever your (n)vim config folder is)
+mv UltiSnips UltiSnips.bak
+git clone https://github.com/ewen-lbh/latex-snippets UltiSnips
+# If you want to keep your old snippets:
+mv UltiSnips.bak/** UltiSnips/
+rmdir UltiSnips.bak
 ```
-
-For the colorscheme, install [pywal](https://github.com/dylanaraps/pywal), add the following to your `.vimrc`
-
-```vim
-Plug 'dylanaraps/wal'
-colorscheme wal
-set background=dark
-```
-
-Finally, execute `wal --theme base16-nord`.
-
-Something not working as expected? Feel free to open an issue!
