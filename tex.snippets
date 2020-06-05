@@ -1,4 +1,5 @@
 global !p
+import re
 tex_math_zones = ['texMathZone' + x for x in ['A', 'AS', 'B', 'BS', 'C', 'CS', 'D', 'DS', 'E', 'ES', 'F', 'FS', 'G', 'GS', 'H', 'HS', 'I', 'IS', 'J', 'JS', 'K', 'KS', 'L', 'LS', 'DS', 'V', 'W', 'X', 'Y', 'Z', 'AmsA', 'AmsB', 'AmsC', 'AmsD', 'AmsE', 'AmsF', 'AmsG', 'AmsAS', 'AmsBS', 'AmsCS', 'AmsDS', 'AmsES', 'AmsFS', 'AmsGS' ]]
 
 tex_ignore_math_zones = ['texMathText']
@@ -41,6 +42,21 @@ def to_greek_letter(letter):
 	'y': 'psi',
 	'w': 'omega'
     }.get(letter, None)
+
+def remove_extension(filename):
+    if not filename or '.' not in filename: return filename
+    parts = filename.split('.')
+    return parts[0]
+
+def to_label(filename):
+    return re.sub(r'\W+', '-', remove_extension(filename))
+
+def to_caption(filename):
+    if not filename: return ''
+    r = remove_extension(filename).replace('-', ' ').replace('_', ' ')
+    r = r[0].upper() + r[1:]
+    return r
+
 endglobal
 
 snippet "[²§]([a-zA-Z=])" "Greek letters" Ar
@@ -83,18 +99,18 @@ snippet fig "Figure environment" b
 \begin{figure}[${1:htpb}]
 	\centering
 	${2:\includegraphics[width=0.8\textwidth]{$3}}
-	\caption{${4:$3}}
-	\label{fig:${5:${3/\W+/-/g}}}
+	\caption{${4:`!p snip.rv=to_caption(t[3])`}}
+	\label{${5:fig:`!p snip.rv=to_label(t[3])`}}
 \end{figure}
 endsnippet
 
-snippet ul "Enumerate" b
+snippet ol "Enumerate" b
 \begin{enumerate}
 	\item $0
 \end{enumerate}
 endsnippet
 
-snippet li "Itemize" b
+snippet ul "Itemize" b
 \begin{itemize}
 	\item $0
 \end{itemize}
@@ -104,6 +120,14 @@ snippet dl "Description" b
 \begin{description}
 	\item[$1] $0
 \end{description}
+endsnippet
+
+snippet li "List item" b
+\item $0
+endsnippet
+
+snippet dd "Keyword item" b
+\item[$1] $0
 endsnippet
 
 snippet pkg "Package" b
@@ -597,6 +621,11 @@ snippet tt "text" iA
 endsnippet
 
 context "math()"
+snippet txt "Explanation (aside text in equation)" i
+\quad\text{$1}$0
+endsnippet
+
+context "math()"
 snippet case "cases" wA
 \begin{cases}
 	$1
@@ -650,6 +679,23 @@ snippet DD "D" iA
 \mathbb{D}
 endsnippet
 
+snippet sub "Subsection" b
+\subsection{$1}
+$0
+endsnippet
 
+snippet sec "Section" b
+\section{$1}
+$0
+endsnippet
+
+snippet ssub "Sub-sub section" b
+\subsubsection{$1}
+$0
+endsnippet
+
+snippet em "Emphasis"
+\emph{$1} $0
+endsnippet
 
 # vim:ft=snippets
