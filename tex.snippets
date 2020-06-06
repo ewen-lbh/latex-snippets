@@ -158,14 +158,14 @@ endsnippet
 
 snippet $d "Math" wA
 \[
-${1:${VISUAL}}
-.\] $0
+	${1:${VISUAL}}
+\] $0
 endsnippet
 
 snippet $a "Align" bA
 \begin{align*}
 	${1:${VISUAL}}
-.\end{align*}
+\end{align*}
 endsnippet
 
 context "math()"
@@ -460,13 +460,13 @@ endsnippet
 
 context "math()"
 snippet xx "cross" iA
-\times 
+ \times 
 endsnippet
 
 priority 100
 context "math()"
 snippet * "cdot" iA
-\cdot 
+ \cdot 
 endsnippet
 
 context "math()"
@@ -621,7 +621,7 @@ snippet tt "text" iA
 endsnippet
 
 context "math()"
-snippet txt "Explanation (aside text in equation)" i
+snippet txt "Explanation (aside text in equation)" iA
 \quad\text{$1}$0
 endsnippet
 
