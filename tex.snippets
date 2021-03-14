@@ -1,21 +1,13 @@
 global !p
-import re
-tex_math_zones = ['texMathZone' + x for x in ['A', 'AS', 'B', 'BS', 'C', 'CS', 'D', 'DS', 'E', 'ES', 'F', 'FS', 'G', 'GS', 'H', 'HS', 'I', 'IS', 'J', 'JS', 'K', 'KS', 'L', 'LS', 'DS', 'V', 'W', 'X', 'Y', 'Z', 'AmsA', 'AmsB', 'AmsC', 'AmsD', 'AmsE', 'AmsF', 'AmsG', 'AmsAS', 'AmsBS', 'AmsCS', 'AmsDS', 'AmsES', 'AmsFS', 'AmsGS' ]]
-
-tex_ignore_math_zones = ['texMathText']
-
-tex_math_zone_ids = vim.eval('map('+str(tex_math_zones)+", 'hlID(v:val)')")
-tex_ignore_math_zone_ids = vim.eval('map('+str(tex_ignore_math_zones)+", 'hlID(v:val)')")
-
-ignore = tex_ignore_math_zone_ids[0]
-
 def math():
-	synstackids = vim.eval("synstack(line('.'), col('.') - (col('.')>=2 ? 1 : 0))")
-	try:
-		first = next(i for i in reversed(synstackids) if i in tex_ignore_math_zone_ids or i in tex_math_zone_ids)
-		return first != ignore
-	except StopIteration:
-		return False
+    return vim.eval('vimtex#syntax#in_mathzone()') == '1'
+
+def comment():
+    return vim.eval('vimtex#syntax#in_comment()') == '1'
+
+def env(name):
+    [x,y] = vim.eval("vimtex#env#is_inside('" + name + "')") 
+    return x != '0' and x != '0'
 
 def to_greek_letter(letter):
     return {
@@ -254,7 +246,7 @@ snippet ceil "ceil" iA
 endsnippet
 
 context "math()"
-snippet floor "floor" iA
+snippet flor "floor" iA
 \left\lfloor $1 \right\rfloor$0
 endsnippet
 
@@ -475,7 +467,7 @@ endsnippet
 
 priority 100
 context "math()"
-snippet '(?<!\\)(sin|cos|arccot|cot|csc|ln|log|exp|star|perp)' "Functions" rwA
+snippet '(?<!\\)(sin|cos|tan|arccot|cot|csc|ln|log|exp|star|perp)' "Functions" rwA
 \\`!p snip.rv = match.group(1)`
 endsnippet
 
@@ -695,6 +687,16 @@ endsnippet
 
 snippet em "Emphasis"
 \emph{$1} $0
+endsnippet
+
+snippet pp "Paragraoh" b
+\paragraph{$1}
+$0
+endsnippet
+
+snippet axes "Axes for tikzpicture"
+\draw[->] (${1:-1}, 0) -- (${2:10}, 0);
+\draw[->] (0, ${1:-1}) -- (0, ${2:10});
 endsnippet
 
 # vim:ft=snippets
