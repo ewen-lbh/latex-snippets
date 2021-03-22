@@ -139,7 +139,7 @@ snippet iff "iff" Ai
 \iff
 endsnippet
 
-snippet $s "Math" wA
+snippet mk "Math" wA
 $${1}$`!p
 if t[2] and t[2][0] not in [',', '.', '?', '-', ' ']:
 	snip.rv = ' '
@@ -148,16 +148,16 @@ else:
 `$2
 endsnippet
 
-snippet $d "Math" wA
+snippet dm "Math" wA
 \[
 ${1:${VISUAL}}
-.\] $0
+\] $0
 endsnippet
 
-snippet $a "Align" bA
+snippet qm "Align" wA
 \begin{align*}
 	${1:${VISUAL}}
-.\end{align*}
+\end{align*}
 endsnippet
 
 context "math()"
@@ -298,7 +298,7 @@ endsnippet
 
 context "math()"
 snippet sum "sum" w
-\sum_{n=${1:1}}^{${2:\infty}} ${3:a_n z^n}
+\sum_{k=${1:0}}^{${2:n}} $3
 endsnippet
 
 snippet lim "limit" w
@@ -670,6 +670,10 @@ snippet DD "D" iA
 \mathbb{D}
 endsnippet
 
+snippet KK "K" iA
+\K
+endsnippet
+
 snippet sub "Subsection" b
 \subsection{$1}
 $0
@@ -697,6 +701,10 @@ endsnippet
 snippet axes "Axes for tikzpicture"
 \draw[->] (${1:-1}, 0) -- (${2:10}, 0);
 \draw[->] (0, ${1:-1}) -- (0, ${2:10});
+endsnippet
+
+snippet exlain "Explain in align math environment" A
+\quad&\text{$1}
 endsnippet
 
 # vim:ft=snippets
