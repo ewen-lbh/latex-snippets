@@ -512,11 +512,6 @@ snippet invs "inverse" iA
 endsnippet
 
 context "math()"
-snippet set- "setminus" iA
-\setminus
-endsnippet
-
-context "math()"
 snippet \\\ "setminus" iA
 \setminus
 endsnippet
@@ -540,6 +535,11 @@ endsnippet
 context "math()"
 snippet set "set" wA
 \\{$1\\} $0
+endsnippet
+
+context "math()"
+snippet lset "large set" wA
+\\left\\{ $1 \\right\\}
 endsnippet
 
 snippet || "mid" iA
@@ -716,8 +716,6 @@ endsnippet
 
 snippet exlain "Explain in align math environment" A
 \quad&\text{$1}
-snippet '(?<!\\)propto' "Proportional to" riA
- \propto 
 endsnippet
 
 # vim:ft=snippets
