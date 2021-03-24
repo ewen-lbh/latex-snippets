@@ -76,6 +76,10 @@ snippet ... "ldots" iA
 \ldots
 endsnippet
 
+snippet ::: "cdots" iA
+\cdots
+endsnippet
+
 snippet table "Table environment" b
 \begin{table}[${1:htpb}]
 	\centering
@@ -636,7 +640,13 @@ snippet bigfn "Big function" iA
 endsnippet
 
 snippet cvec "column vector" iA
-\begin{pmatrix} ${1:x}_${2:1}\\\\ \vdots\\\\ $1_${2:n} \end{pmatrix}
+\begin{pmatrix} $1 \\ $2 \\ $3 \end{pmatrix} 
+endsnippet
+
+# TODO: smart version 'smatN' with N integer which sets the dimension
+# TODO: another version 'matNxM' with N, M integers which sets column & line count
+snippet smat "square matrix" iA
+\begin{pmatrix} $1 & $2 \\ $3 & $4 \end{pmatrix}
 endsnippet
 
 priority 10
